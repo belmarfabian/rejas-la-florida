@@ -1,0 +1,15 @@
+# Archivos temporales
+*.pyc
+__pycache__/
+.ipynb_checkpoints/
+*.tmp
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos grandes de datos originales (opcional)
+# 00_archivo_portones/
+
+# ZIP generados
+*.zip

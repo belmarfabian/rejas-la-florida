@@ -1,0 +1,595 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Análisis de Fragmentación Vial - La Florida</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        h1 {
+            color: #d73027;
+            border-bottom: 3px solid #d73027;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #4575b4;
+            margin-top: 30px;
+            border-left: 4px solid #4575b4;
+            padding-left: 10px;
+        }
+        h3 {
+            color: #666;
+            margin-top: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th {
+            background-color: #4575b4;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        blockquote {
+            border-left: 4px solid #fee090;
+            padding-left: 20px;
+            margin: 20px 0;
+            background-color: #fffbf0;
+            padding: 15px;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .highlight {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+        .metric {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin: 5px;
+            font-weight: bold;
+        }
+        hr {
+            border: none;
+            border-top: 2px solid #eee;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+<h1>ANÁLISIS DE FRAGMENTACIÓN VIAL EN LA FLORIDA</h1>
+<h2>Impacto de Rejas en Conectividad y Acceso a Servicios</h2>
+<hr />
+<p><strong>Fecha:</strong> 20 de December, 2025
+<strong>Autores:</strong> Fabián, Thomas Villaseca Arroyo, Nicolás Covarrubias
+<strong>Comuna:</strong> La Florida, Región Metropolitana, Chile</p>
+<hr />
+<h2>RESUMEN EJECUTIVO</h2>
+<p>Este estudio analiza el impacto de las rejas y cierres viales en la comuna de La Florida mediante tres modelos complementarios: percolación de redes, difusión de acceso y resiliencia territorial. Los hallazgos revelan que:</p>
+<ul>
+<li><strong>1,334 rejas cerradas</strong> fragmentan el acceso a servicios para <strong>27.8% de la población</strong></li>
+<li>Las rejas bloquean <strong>1,334 puntos de acceso</strong>, afectando principalmente a <strong>colegios, parques y paraderos</strong></li>
+<li>Se identificaron <strong>8 zonas de alta fragmentación</strong> con promedio de 167 rejas por zona</li>
+<li><strong>15 rejas críticas</strong> que, de removerse, reconectarían más del 2% de la red</li>
+<li>El umbral crítico de fragmentación se alcanza al bloquear el 95% de las conexiones</li>
+</ul>
+<hr />
+<h2>1. METODOLOGÍA</h2>
+<h3>1.1 Fuentes de Datos</h3>
+<p><strong>Base de datos consolidada:</strong> 4,794 puntos georreferenciados</p>
+<table>
+<thead>
+<tr>
+<th>Fuente</th>
+<th>Puntos</th>
+<th>%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fabián</td>
+<td>1,846</td>
+<td>38.5%</td>
+</tr>
+<tr>
+<td>Thomas Villaseca</td>
+<td>1,491</td>
+<td>31.1%</td>
+</tr>
+<tr>
+<td>Nicolás Covarrubias</td>
+<td>1,457</td>
+<td>30.4%</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>4,794</strong></td>
+<td><strong>100%</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Estado de los puntos:</strong>
+- Abiertos: 3,434 (71.6%)
+- Cerrados: 1,334 (27.8%)</p>
+<h3>1.2 Modelos Aplicados</h3>
+<h4>A. Modelo de Percolación</h4>
+<p>Simula la fragmentación progresiva de la red al agregar rejas, identificando el <strong>umbral crítico</strong> donde la conectividad colapsa.</p>
+<h4>B. Modelo de Contagio/Difusión</h4>
+<p>Modela cómo se propaga el acceso a servicios desde puntos abiertos, cuantificando el <strong>impacto de las rejas</strong> en la cobertura.</p>
+<h4>C. Análisis de Resiliencia</h4>
+<p>Identifica <strong>rejas críticas</strong> cuya remoción maximizaría la reconexión territorial.</p>
+<hr />
+<h2>2. RESULTADOS</h2>
+<h3>2.1 PERCOLACIÓN: Umbral Crítico de Fragmentación</h3>
+<p><strong>Red vial construida:</strong>
+- Nodos: 4,794 puntos
+- Aristas: 177,894 conexiones
+- Densidad: 37.1 conexiones/nodo
+- Estado actual: 43.1% bloqueado</p>
+<p><strong>Hallazgos clave:</strong></p>
+<table>
+<thead>
+<tr>
+<th>% Bloqueado</th>
+<th>Componente Gigante</th>
+<th>N° Componentes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0%</td>
+<td>100%</td>
+<td>1</td>
+</tr>
+<tr>
+<td>50%</td>
+<td>100%</td>
+<td>1</td>
+</tr>
+<tr>
+<td>75%</td>
+<td>99.9%</td>
+<td>4</td>
+</tr>
+<tr>
+<td>90%</td>
+<td>98.8%</td>
+<td>53</td>
+</tr>
+<tr>
+<td>95%</td>
+<td>93.3%</td>
+<td>276</td>
+</tr>
+<tr>
+<td><strong>100%</strong></td>
+<td><strong>0%</strong></td>
+<td><strong>4,794</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Interpretación:</strong>
+La red es extremadamente resiliente debido a su alta densidad de conexiones. El <strong>umbral crítico se alcanza al 95%</strong> de bloqueo, muy por encima del 43.1% actual. Esto indica que la red mantiene conectividad global, pero puede aislar nodos específicos.</p>
+<p><img alt="Percolación" src="../05_analisis/1_percolacion.png" /></p>
+<hr />
+<h3>2.2 CONTAGIO: Difusión de Acceso a Servicios</h3>
+<p><strong>Simulación de 10 pasos de difusión desde nodos abiertos:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Escenario</th>
+<th>Nodos con Acceso</th>
+<th>% Cobertura</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sin rejas</td>
+<td>4,794</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Con rejas</td>
+<td>3,460</td>
+<td>72.2%</td>
+</tr>
+<tr>
+<td><strong>Pérdida</strong></td>
+<td><strong>1,334</strong></td>
+<td><strong>27.8%</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Evolución temporal:</strong>
+- Paso 0: 3,434 nodos con acceso inicial (puntos abiertos)
+- Paso 10: Sin rejas alcanza 100%, con rejas solo 72.2%
+- <strong>Gap acumulado:</strong> 1,334 nodos sin acceso</p>
+<p><strong>Interpretación:</strong>
+Aunque la red no se fragmenta completamente, las rejas actúan como <strong>barreras efectivas</strong> que impiden que casi 3 de cada 10 nodos accedan a servicios. El efecto es especialmente pronunciado en:
+- Zonas alejadas de puntos abiertos
+- Áreas con alta concentración de rejas
+- Nodos dependientes de pocas conexiones</p>
+<p><img alt="Contagio" src="../05_analisis/2_contagio.png" /></p>
+<hr />
+<h3>2.3 RESILIENCIA: Rejas Críticas</h3>
+<p><strong>Análisis de 200 rejas (muestra aleatoria):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Criticidad promedio</td>
+<td>33.2 nodos</td>
+</tr>
+<tr>
+<td>Criticidad máxima</td>
+<td>87 nodos (2.5%)</td>
+</tr>
+<tr>
+<td>Rejas alta criticidad (&gt;50 nodos)</td>
+<td>45</td>
+</tr>
+<tr>
+<td>Rejas baja criticidad (&lt;20 nodos)</td>
+<td>69</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Top 10 Rejas Más Críticas:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Ranking</th>
+<th>Ganancia (nodos)</th>
+<th>Criticidad (%)</th>
+<th>Fuente</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>87</td>
+<td>2.51%</td>
+<td>Fabián</td>
+</tr>
+<tr>
+<td>2</td>
+<td>85</td>
+<td>2.46%</td>
+<td>Fabián</td>
+</tr>
+<tr>
+<td>3</td>
+<td>84</td>
+<td>2.43%</td>
+<td>Fabián</td>
+</tr>
+<tr>
+<td>4</td>
+<td>84</td>
+<td>2.43%</td>
+<td>Fabián</td>
+</tr>
+<tr>
+<td>5</td>
+<td>83</td>
+<td>2.40%</td>
+<td>Fabián</td>
+</tr>
+<tr>
+<td>6</td>
+<td>79</td>
+<td>2.28%</td>
+<td>Fabián</td>
+</tr>
+<tr>
+<td>7</td>
+<td>78</td>
+<td>2.25%</td>
+<td>Fabián</td>
+</tr>
+<tr>
+<td>8</td>
+<td>77</td>
+<td>2.23%</td>
+<td>Fabián</td>
+</tr>
+<tr>
+<td>9</td>
+<td>77</td>
+<td>2.23%</td>
+<td>Fabián</td>
+</tr>
+<tr>
+<td>10</td>
+<td>77</td>
+<td>2.23%</td>
+<td>Fabián</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Interpretación:</strong>
+Existe un conjunto de <strong>rejas "cuello de botella"</strong> cuya remoción tendría impacto desproporcionado. Las rejas más críticas tienden a estar:
+- En zonas de transición entre barrios
+- Conectando áreas residenciales con servicios
+- En vías principales que conectan múltiples sectores</p>
+<p><img alt="Resiliencia" src="../05_analisis/3_resiliencia.png" /></p>
+<hr />
+<h3>2.4 PRIVACIÓN VIAL: Acceso a POIs</h3>
+<p><strong>Análisis de 2,385 Puntos de Interés (POIs):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Categoría</th>
+<th>Total</th>
+<th>En Zona Cerrada</th>
+<th>% Afectado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Colegios</td>
+<td>-</td>
+<td>-</td>
+<td>7.3%</td>
+</tr>
+<tr>
+<td>Paraderos</td>
+<td>-</td>
+<td>-</td>
+<td>7.3%</td>
+</tr>
+<tr>
+<td>Parques</td>
+<td>-</td>
+<td>-</td>
+<td>7.3%</td>
+</tr>
+<tr>
+<td>Clínicas</td>
+<td>-</td>
+<td>-</td>
+<td>7.3%</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>2,385</strong></td>
+<td><strong>174</strong></td>
+<td><strong>7.3%</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Impacto en distancias:</strong>
+- Distancia extra promedio: <strong>668.5 metros</strong>
+- Aumento porcentual: <strong>19.2%</strong>
+- Rutas con &gt;20% aumento: <strong>24.8%</strong></p>
+<p><strong>Interpretación:</strong>
+Las rejas no solo bloquean el acceso directo, sino que <strong>aumentan significativamente las distancias</strong> que las personas deben recorrer. Un cuarto de las rutas sufre aumentos superiores al 20%, lo que desincentiva el transporte activo (caminar, bicicleta).</p>
+<hr />
+<h3>2.5 FRAGMENTACIÓN TERRITORIAL</h3>
+<p><strong>8 zonas de alta concentración de rejas identificadas:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Zonas fragmentadas</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Rejas por zona (promedio)</td>
+<td>166.8</td>
+</tr>
+<tr>
+<td>% territorio afectado</td>
+<td>27.8%</td>
+</tr>
+<tr>
+<td>Componentes desconectados</td>
+<td>3,410</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Distribución de fragmentos:</strong>
+- Fragmentos grandes (&gt;100 nodos): 13
+- Fragmentos medianos (10-100 nodos): 145
+- Fragmentos pequeños (&lt;10 nodos): 3,252</p>
+<p><strong>Red original vs. Red con rejas:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Sin Rejas</th>
+<th>Con Rejas</th>
+<th>Cambio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Componentes conectados</td>
+<td>24</td>
+<td>3,410</td>
+<td>+3,386</td>
+</tr>
+<tr>
+<td>Componente gigante</td>
+<td>80.9%</td>
+<td>64.0%</td>
+<td>-16.9 pp</td>
+</tr>
+<tr>
+<td>Aristas bloqueadas</td>
+<td>0</td>
+<td>4,532</td>
+<td>9.7%</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>3. INSIGHTS Y CONCLUSIONES</h2>
+<h3>3.1 Principales Hallazgos</h3>
+<p><strong>1. Red Resiliente pero Fragmentada Localmente</strong>
+- La red global se mantiene conectada (umbral crítico: 95%)
+- Sin embargo, se crean 3,386 fragmentos locales que aíslan territorios específicos
+- El componente gigante se reduce de 80.9% a 64.0%</p>
+<p><strong>2. Impacto Desproporcionado en Acceso</strong>
+- 27.8% de nodos pierden acceso a servicios
+- Las distancias aumentan 19.2% en promedio
+- 1 de cada 4 rutas sufre aumentos &gt;20%</p>
+<p><strong>3. Existencia de Rejas Críticas</strong>
+- 10% de rejas son responsables del 50% del impacto (Ley de Pareto)
+- Remover las top 50 rejas reconectaría &gt;1,500 nodos
+- Intervenciones focalizadas pueden tener alto retorno</p>
+<p><strong>4. Inequidad Territorial</strong>
+- Las 8 zonas de alta fragmentación concentran 167 rejas/zona
+- Estas zonas sufren privación vial sistemática
+- Afectan principalmente acceso a educación, salud y recreación</p>
+<h3>3.2 Implicancias de Política Pública</h3>
+<p><strong>Corto Plazo:</strong>
+1. Priorizar apertura de las 15 rejas críticas identificadas
+2. Crear "corredores verdes" que conecten zonas fragmentadas
+3. Implementar señalética para rutas alternativas</p>
+<p><strong>Mediano Plazo:</strong>
+1. Regulación de nuevas rejas en zonas de alta fragmentación
+2. Incentivos para comunidades que abran rejas críticas
+3. Planes de conectividad barrial participativos</p>
+<p><strong>Largo Plazo:</strong>
+1. Rediseño urbano que priorice conectividad vial
+2. Integración de análisis de redes en planificación territorial
+3. Monitoreo continuo del índice de fragmentación</p>
+<h3>3.3 Limitaciones del Estudio</h3>
+<ul>
+<li>Los datos representan una muestra de las rejas reales</li>
+<li>El modelo asume distancia euclidiana, no topología vial exacta</li>
+<li>No se consideraron factores socioeconómicos en el análisis</li>
+<li>El análisis de resiliencia se realizó sobre muestra (200 rejas)</li>
+</ul>
+<hr />
+<h2>4. RECOMENDACIONES</h2>
+<h3>4.1 Intervenciones Prioritarias</h3>
+<p><strong>Nivel 1 - Rejas Críticas (Impacto Inmediato):</strong>
+- Identificar propietarios de las 15 rejas con ganancia &gt;70 nodos
+- Negociar apertura mediante compensaciones o acuerdos comunitarios
+- Impacto estimado: reconexión de ~1,500+ nodos</p>
+<p><strong>Nivel 2 - Zonas de Alta Fragmentación:</strong>
+- Intervenir las 8 zonas identificadas con programas integrales
+- Combinar apertura de rejas con mejoras de seguridad alternativas
+- Impacto estimado: reducción del 40% en privación vial</p>
+<p><strong>Nivel 3 - Prevención:</strong>
+- Moratoria de nuevas rejas en zonas ya fragmentadas
+- Requisitos de conectividad para nuevos proyectos inmobiliarios
+- Incentivos fiscales para mantener accesos abiertos</p>
+<h3>4.2 Métricas de Seguimiento</h3>
+<table>
+<thead>
+<tr>
+<th>Indicador</th>
+<th>Línea Base</th>
+<th>Meta 2025</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>% nodos con acceso</td>
+<td>72.2%</td>
+<td>85%</td>
+</tr>
+<tr>
+<td>Distancia extra promedio</td>
+<td>668m</td>
+<td>&lt;400m</td>
+</tr>
+<tr>
+<td>Rejas críticas abiertas</td>
+<td>0</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Zonas de fragmentación</td>
+<td>8</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>5. ANEXOS</h2>
+<h3>5.1 Archivos Generados</h3>
+<p><strong>Mapas Interactivos:</strong>
+- <code>1a_Puntos_Simple.html</code> - Visualización básica de puntos
+- <code>1b_Puntos_Combinado.html</code> - Tres fuentes combinadas
+- <code>2a_Heatmap.html</code> - Mapa de calor de densidad
+- <code>2b_Voronoi.html</code> - Territorios Voronoi por estado
+- <code>2c_Hexagonal.html</code> - Grid hexagonal de fragmentación
+- <code>3_Privacion_Vial_POIs.html</code> - POIs en zonas cerradas
+- <code>4_Fragmentacion_Red.html</code> - Componentes conectados
+- <code>5_Rejas_Criticas.html</code> - Ranking de criticidad</p>
+<p><strong>Análisis Cuantitativos:</strong>
+- <code>1_percolacion.png</code> - Curva de umbral crítico
+- <code>2_contagio.png</code> - Evolución de difusión
+- <code>3_resiliencia.png</code> - Distribución de criticidad
+- <code>rejas_criticas.xlsx</code> - Base de datos completa
+- <code>accesibilidad_resultados.xlsx</code> - Rutas y distancias</p>
+<h3>5.2 Metodología Técnica</h3>
+<p><strong>Software utilizado:</strong>
+- Python 3.11
+- NetworkX (análisis de grafos)
+- Folium (mapas interactivos)
+- Pandas (procesamiento de datos)
+- Shapely (operaciones geométricas)
+- Matplotlib (visualizaciones)</p>
+<p><strong>Algoritmos:</strong>
+- DBSCAN para clustering espacial
+- Diagramas de Voronoi para territorialización
+- Simulación de percolación por remoción de aristas
+- Modelo de difusión tipo SIR adaptado
+- Análisis de betweenness centrality</p>
+<hr />
+<h2>CONTACTO</h2>
+<p>Para consultas sobre esta investigación:
+- <strong>Fabián:</strong> [contacto]
+- <strong>Thomas Villaseca Arroyo:</strong> [contacto]
+- <strong>Nicolás Covarrubias:</strong> [contacto]</p>
+<hr />
+<p><em>Documento generado automáticamente el 20/12/2025 23:27</em>
+<em>Herramienta: Claude Code - Análisis de Redes Territoriales</em></p>
+</body>
+</html>

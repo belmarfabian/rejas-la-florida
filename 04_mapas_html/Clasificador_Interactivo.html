@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clasificador de Rejas - La Florida</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+
+        /* Panel de control */
+        .control-panel {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(30, 30, 30, 0.95);
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            z-index: 1000;
+            min-width: 280px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .control-panel h2 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #444;
+        }
+
+        .stats {
+            margin-bottom: 15px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            font-size: 13px;
+        }
+
+        .stat-row .dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .dot-pending { background: #f39c12; }
+        .dot-cerrada { background: #e74c3c; }
+        .dot-abierta { background: #2ecc71; }
+        .dot-otro { background: #9b59b6; }
+
+        .progress-bar {
+            background: #333;
+            border-radius: 5px;
+            height: 8px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2ecc71, #27ae60);
+            transition: width 0.3s ease;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+        }
+
+        .btn-export {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-reset {
+            background: #555;
+            color: white;
+        }
+
+        .btn-cerrada {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-abierta {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .btn-otro {
+            background: #9b59b6;
+            color: white;
+        }
+
+        .btn-skip {
+            background: #7f8c8d;
+            color: white;
+        }
+
+        /* Popup de clasificación */
+        .classify-popup {
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .classify-popup h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .classify-popup .coord {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .classify-popup .btn {
+            margin: 5px 0;
+        }
+
+        /* Instrucciones */
+        .instructions {
+            background: rgba(52, 152, 219, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 12px;
+            border-left: 3px solid #3498db;
+        }
+
+        /* Filtros */
+        .filters {
+            margin: 15px 0;
+            padding-top: 10px;
+            border-top: 1px solid #444;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            margin-bottom: 5px;
+            color: #aaa;
+        }
+
+        .filter-btn {
+            padding: 5px 10px;
+            margin: 2px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .filter-btn.active {
+            opacity: 1;
+        }
+
+        /* Nombre del asistente */
+        .assistant-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .assistant-input::placeholder {
+            color: #888;
+        }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            z-index: 2000;
+            display: none;
+            animation: fadeInOut 2s ease;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            85% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        }
+
+        /* Leyenda del mapa */
+        .map-legend {
+            position: fixed;
+            bottom: 20px;
+            left: 10px;
+            background: rgba(30, 30, 30, 0.9);
+            padding: 10px 15px;
+            border-radius: 8px;
+            color: white;
+            z-index: 1000;
+            font-size: 12px;
+        }
+
+        .legend-item {
+            margin: 3px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <!-- Panel de control -->
+    <div class="control-panel">
+        <h2>Clasificador de Rejas</h2>
+
+        <div class="instructions">
+            Haz clic en los puntos <span style="color:#f39c12;">naranjas</span> para clasificarlos como cerrados o abiertos.
+        </div>
+
+        <label style="font-size: 12px; color: #aaa;">Tu nombre:</label>
+        <input type="text" class="assistant-input" id="assistantName" placeholder="Ej: Juan Pérez">
+
+        <div class="stats">
+            <div class="stat-row">
+                <span><span class="dot dot-pending"></span> Pendientes:</span>
+                <span id="pendingCount">0</span>
+            </div>
+            <div class="stat-row">
+                <span><span class="dot dot-cerrada"></span> Cerradas:</span>
+                <span id="cerradaCount">0</span>
+            </div>
+            <div class="stat-row">
+                <span><span class="dot dot-abierta"></span> Abiertas:</span>
+                <span id="abiertaCount">0</span>
+            </div>
+            <div class="stat-row">
+                <span><span class="dot dot-otro"></span> Otro:</span>
+                <span id="otroCount">0</span>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        <div style="text-align: center; font-size: 12px; color: #888;" id="progressText">0% completado</div>
+
+        <div class="filters">
+            <div class="filter-label">Mostrar:</div>
+            <button class="filter-btn active" style="background: #f39c12;" onclick="toggleFilter('pending')">Pendientes</button>
+            <button class="filter-btn active" style="background: #e74c3c;" onclick="toggleFilter('cerrada')">Cerradas</button>
+            <button class="filter-btn active" style="background: #2ecc71;" onclick="toggleFilter('abierta')">Abiertas</button>
+            <button class="filter-btn active" style="background: #9b59b6;" onclick="toggleFilter('otro')">Otro</button>
+        </div>
+
+        <button class="btn btn-export" onclick="exportData()">
+            📥 Exportar Clasificaciones
+        </button>
+
+        <button class="btn btn-reset" onclick="resetData()">
+            🔄 Reiniciar Todo
+        </button>
+    </div>
+
+    <!-- Leyenda -->
+    <div class="map-legend">
+        <div class="legend-item"><span class="dot dot-pending"></span> Pendiente de clasificar</div>
+        <div class="legend-item"><span class="dot dot-cerrada"></span> Cerrada (con reja)</div>
+        <div class="legend-item"><span class="dot dot-abierta"></span> Abierta (sin reja)</div>
+        <div class="legend-item"><span class="dot dot-otro"></span> Otro tipo</div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // =====================================================
+        // DATOS DE INTERSECCIONES SIN CLASIFICAR
+        // =====================================================
+        // Estos datos se generan desde Python con los nodos faltantes
+        const INTERSECCIONES = [
+            // DATOS_PLACEHOLDER - Será reemplazado por Python
+        ];
+
+        // =====================================================
+        // CONFIGURACIÓN
+        // =====================================================
+        const CONFIG = {
+            centro: [-33.52, -70.60],
+            zoom: 14,
+            colores: {
+                pending: '#f39c12',
+                cerrada: '#e74c3c',
+                abierta: '#2ecc71',
+                otro: '#9b59b6'
+            }
+        };
+
+        // =====================================================
+        // ESTADO DE LA APLICACIÓN
+        // =====================================================
+        let markers = {};
+        let clasificaciones = {};
+        let filtros = {
+            pending: true,
+            cerrada: true,
+            abierta: true,
+            otro: true
+        };
+
+        // Cargar clasificaciones guardadas
+        function loadSavedData() {
+            const saved = localStorage.getItem('clasificaciones_rejas');
+            if (saved) {
+                clasificaciones = JSON.parse(saved);
+            }
+        }
+
+        // Guardar clasificaciones
+        function saveData() {
+            localStorage.setItem('clasificaciones_rejas', JSON.stringify(clasificaciones));
+        }
+
+        // =====================================================
+        // INICIALIZAR MAPA
+        // =====================================================
+        const map = L.map('map').setView(CONFIG.centro, CONFIG.zoom);
+
+        // Capa base oscura
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '© OpenStreetMap © CARTO',
+            maxZoom: 19
+        }).addTo(map);
+
+        // =====================================================
+        // CREAR MARCADORES
+        // =====================================================
+        function createMarkers() {
+            INTERSECCIONES.forEach((inter, index) => {
+                const estado = clasificaciones[index]?.estado || 'pending';
+                const color = CONFIG.colores[estado];
+
+                const marker = L.circleMarker([inter.lat, inter.lon], {
+                    radius: estado === 'pending' ? 8 : 6,
+                    fillColor: color,
+                    color: estado === 'pending' ? '#fff' : color,
+                    weight: estado === 'pending' ? 2 : 1,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                });
+
+                marker.on('click', () => openClassifyPopup(index, inter));
+                marker.addTo(map);
+
+                markers[index] = {
+                    marker: marker,
+                    estado: estado,
+                    data: inter
+                };
+            });
+        }
+
+        // =====================================================
+        // POPUP DE CLASIFICACIÓN
+        // =====================================================
+        function openClassifyPopup(index, inter) {
+            const currentEstado = clasificaciones[index]?.estado || 'pending';
+            const estadoText = {
+                'pending': 'Pendiente',
+                'cerrada': 'Cerrada',
+                'abierta': 'Abierta',
+                'otro': 'Otro'
+            };
+
+            const content = `
+                <div class="classify-popup">
+                    <h3>Clasificar Punto #${index + 1}</h3>
+                    <div class="coord">${inter.lat.toFixed(6)}, ${inter.lon.toFixed(6)}</div>
+                    <div style="margin-bottom: 10px; font-size: 12px;">
+                        Estado actual: <strong>${estadoText[currentEstado]}</strong>
+                    </div>
+                    <button class="btn btn-cerrada" onclick="clasificar(${index}, 'cerrada')">
+                        🚧 CERRADA (con reja)
+                    </button>
+                    <button class="btn btn-abierta" onclick="clasificar(${index}, 'abierta')">
+                        ✅ ABIERTA (sin reja)
+                    </button>
+                    <button class="btn btn-otro" onclick="clasificar(${index}, 'otro')">
+                        ❓ OTRO TIPO
+                    </button>
+                    ${currentEstado !== 'pending' ?
+                        `<button class="btn btn-skip" onclick="clasificar(${index}, 'pending')">
+                            ↩️ Volver a pendiente
+                        </button>` : ''
+                    }
+                </div>
+            `;
+
+            L.popup()
+                .setLatLng([inter.lat, inter.lon])
+                .setContent(content)
+                .openOn(map);
+        }
+
+        // =====================================================
+        // CLASIFICAR PUNTO
+        // =====================================================
+        function clasificar(index, estado) {
+            const inter = INTERSECCIONES[index];
+            const assistantName = document.getElementById('assistantName').value || 'Anónimo';
+
+            clasificaciones[index] = {
+                estado: estado,
+                lat: inter.lat,
+                lon: inter.lon,
+                grado: inter.grado,
+                timestamp: new Date().toISOString(),
+                clasificadoPor: assistantName
+            };
+
+            // Actualizar marcador
+            updateMarker(index, estado);
+
+            // Guardar
+            saveData();
+
+            // Actualizar estadísticas
+            updateStats();
+
+            // Cerrar popup
+            map.closePopup();
+
+            // Mostrar toast
+            const msgs = {
+                'cerrada': '🚧 Marcada como CERRADA',
+                'abierta': '✅ Marcada como ABIERTA',
+                'otro': '❓ Marcada como OTRO',
+                'pending': '↩️ Vuelto a pendiente'
+            };
+            showToast(msgs[estado]);
+
+            // Ir al siguiente pendiente
+            if (estado !== 'pending') {
+                goToNextPending(index);
+            }
+        }
+
+        // =====================================================
+        // ACTUALIZAR MARCADOR
+        // =====================================================
+        function updateMarker(index, estado) {
+            const color = CONFIG.colores[estado];
+            const marker = markers[index].marker;
+
+            marker.setStyle({
+                fillColor: color,
+                color: estado === 'pending' ? '#fff' : color,
+                radius: estado === 'pending' ? 8 : 6,
+                weight: estado === 'pending' ? 2 : 1
+            });
+
+            markers[index].estado = estado;
+
+            // Aplicar filtro
+            if (!filtros[estado]) {
+                marker.setStyle({ opacity: 0, fillOpacity: 0 });
+            }
+        }
+
+        // =====================================================
+        // IR AL SIGUIENTE PENDIENTE
+        // =====================================================
+        function goToNextPending(currentIndex) {
+            // Buscar el siguiente pendiente
+            for (let i = currentIndex + 1; i < INTERSECCIONES.length; i++) {
+                if (!clasificaciones[i] || clasificaciones[i].estado === 'pending') {
+                    const inter = INTERSECCIONES[i];
+                    map.setView([inter.lat, inter.lon], 17);
+                    setTimeout(() => openClassifyPopup(i, inter), 300);
+                    return;
+                }
+            }
+
+            // Si no hay más después, buscar desde el inicio
+            for (let i = 0; i < currentIndex; i++) {
+                if (!clasificaciones[i] || clasificaciones[i].estado === 'pending') {
+                    const inter = INTERSECCIONES[i];
+                    map.setView([inter.lat, inter.lon], 17);
+                    setTimeout(() => openClassifyPopup(i, inter), 300);
+                    return;
+                }
+            }
+
+            // No hay más pendientes
+            showToast('🎉 ¡Todos los puntos han sido clasificados!');
+        }
+
+        // =====================================================
+        // ACTUALIZAR ESTADÍSTICAS
+        // =====================================================
+        function updateStats() {
+            let counts = { pending: 0, cerrada: 0, abierta: 0, otro: 0 };
+
+            INTERSECCIONES.forEach((_, index) => {
+                const estado = clasificaciones[index]?.estado || 'pending';
+                counts[estado]++;
+            });
+
+            document.getElementById('pendingCount').textContent = counts.pending;
+            document.getElementById('cerradaCount').textContent = counts.cerrada;
+            document.getElementById('abiertaCount').textContent = counts.abierta;
+            document.getElementById('otroCount').textContent = counts.otro;
+
+            const total = INTERSECCIONES.length;
+            const classified = total - counts.pending;
+            const percent = total > 0 ? Math.round((classified / total) * 100) : 0;
+
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = `${percent}% completado (${classified}/${total})`;
+        }
+
+        // =====================================================
+        // FILTROS
+        // =====================================================
+        function toggleFilter(estado) {
+            filtros[estado] = !filtros[estado];
+
+            // Actualizar botón
+            const btns = document.querySelectorAll('.filter-btn');
+            btns.forEach(btn => {
+                if (btn.textContent.toLowerCase().includes(estado.substring(0, 4))) {
+                    btn.classList.toggle('active', filtros[estado]);
+                }
+            });
+
+            // Actualizar marcadores
+            Object.keys(markers).forEach(index => {
+                const markerData = markers[index];
+                if (markerData.estado === estado) {
+                    markerData.marker.setStyle({
+                        opacity: filtros[estado] ? 1 : 0,
+                        fillOpacity: filtros[estado] ? 0.8 : 0
+                    });
+                }
+            });
+        }
+
+        // =====================================================
+        // EXPORTAR DATOS
+        // =====================================================
+        function exportData() {
+            const classified = Object.values(clasificaciones).filter(c => c.estado !== 'pending');
+
+            if (classified.length === 0) {
+                showToast('⚠️ No hay clasificaciones para exportar');
+                return;
+            }
+
+            // Crear CSV
+            let csv = 'lat,lon,estado,grado,timestamp,clasificado_por\n';
+
+            Object.values(clasificaciones).forEach(c => {
+                if (c.estado !== 'pending') {
+                    const estadoNum = { 'cerrada': 0, 'abierta': 1, 'otro': 2 }[c.estado];
+                    csv += `${c.lat},${c.lon},${estadoNum},${c.grado},${c.timestamp},"${c.clasificadoPor}"\n`;
+                }
+            });
+
+            // Descargar
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `clasificaciones_rejas_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+
+            showToast(`📥 Exportadas ${classified.length} clasificaciones`);
+        }
+
+        // =====================================================
+        // REINICIAR DATOS
+        // =====================================================
+        function resetData() {
+            if (confirm('¿Seguro que quieres borrar TODAS las clasificaciones?')) {
+                clasificaciones = {};
+                localStorage.removeItem('clasificaciones_rejas');
+
+                // Reiniciar marcadores
+                Object.keys(markers).forEach(index => {
+                    updateMarker(parseInt(index), 'pending');
+                });
+
+                updateStats();
+                showToast('🔄 Datos reiniciados');
+            }
+        }
+
+        // =====================================================
+        // TOAST
+        // =====================================================
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 2000);
+        }
+
+        // =====================================================
+        // INICIALIZAR
+        // =====================================================
+        loadSavedData();
+        createMarkers();
+        updateStats();
+
+        // Cargar nombre guardado
+        const savedName = localStorage.getItem('assistant_name');
+        if (savedName) {
+            document.getElementById('assistantName').value = savedName;
+        }
+
+        // Guardar nombre cuando cambie
+        document.getElementById('assistantName').addEventListener('change', function() {
+            localStorage.setItem('assistant_name', this.value);
+        });
+    </script>
+</body>
+</html>

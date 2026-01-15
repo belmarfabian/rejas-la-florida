@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python:*)",
+      "Bash(start Mapa_Rejas_RegionMetropolitana.html)",
+      "Bash(dir:*)",
+      "Bash(start \"\" \"c:\\Users\\fabia\\Downloads\\La Florida\\Mapa_Calles_Abiertas.html\")",
+      "Bash(start \"\" \"c:\\Users\\fabia\\Downloads\\La Florida\\Mapa_Rejas_Thomas.html\")",
+      "Bash(start \"\" \"c:\\Users\\fabia\\Downloads\\La Florida\\Mapa_Combinado.html\")",
+      "Bash(start \"\" \"c:\\Users\\fabia\\Downloads\\La Florida\\04_mapas_html\\Mapa_Privacion_Vial.html\")",
+      "Bash(pip install:*)",
+      "Bash(start \"\" \"c:\\Users\\fabia\\Downloads\\La Florida\\04_mapas_html\\3_Privacion_Vial_POIs.html\")",
+      "Bash(del \"c:\\Users\\fabia\\Downloads\\La Florida\\temp_mapa3.py\")",
+      "Bash(cat:*)",
+      "Bash(start \"\" \"c:\\\\Users\\\\fabia\\\\Downloads\\\\La Florida\\\\04_mapas_html\\\\4_Fragmentacion_Red.html\")",
+      "Bash(start \"\" \"05_analisis\\\\1_percolacion.png\")",
+      "Bash(start \"\" \"05_analisis\\\\2_contagio.png\")",
+      "Bash(start \"\" \"05_analisis\\\\3_resiliencia.png\")",
+      "Bash(start \"\" \"04_mapas_html\\\\5_Rejas_Criticas.html\")",
+      "Bash(start \"\" \"06_reporte\\\\Reporte_Fragmentacion_Vial_LaFlorida.html\")",
+      "Bash(start \"\" \"06_reporte\\\\Reporte_Fragmentacion_Vial_LaFlorida.md\")",
+      "Bash(mv:*)",
+      "Bash(mkdir:*)",
+      "Bash(ls:*)",
+      "Bash(start \"\" \"c:/Users/fabia/Downloads/La Florida/04_mapas_html/1_Mapa_Rejas.html\")",
+      "Bash(start:*)",
+      "Bash(del \"c:\\\\Users\\\\fabia\\\\Downloads\\\\La Florida\\\\temp_mapa5_filtrado.py\")",
+      "Bash(del \"c:\\\\Users\\\\fabia\\\\Downloads\\\\La Florida\\\\temp_mapa5_v2.py\")",
+      "Bash(rm:*)",
+      "Bash(unzip:*)",
+      "Bash(git init:*)",
+      "Bash(git branch:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
