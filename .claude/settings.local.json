@@ -30,7 +30,12 @@
       "Bash(unzip:*)",
       "Bash(git init:*)",
       "Bash(git branch:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nProyecto Rejas La Florida - Clasificador interactivo\n\n- Datos de rejas/cierres de pasajes en La Florida, Santiago\n- Clasificador interactivo para que asistentes clasifiquen puntos\n- Scripts de procesamiento: merge, snap to road, mapas\n- 10,134 intersecciones residenciales mapeadas\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(gh repo create:*)",
+      "Bash(gh api:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nFix: Solo inicios de pasaje \\(residencial -> principal\\)\n\n- Antes: 10,134 puntos \\(cualquier intersección residencial\\)\n- Ahora: 2,044 inicios de pasaje reales\n- Solo donde calle residencial conecta con calle principal\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
